@@ -203,7 +203,7 @@ public class APIFactoryImplementation implements APIFactory{
             stubFor(get(urlEqualTo(uri))
                     .willReturn(aResponse()
                             .withStatus(200)
-                            .withBody(readFileAsString("src/test/resources/wiremock/__files/"+response+".json"))
+                            .withBody(readFileAsString(Constants.wireMockFilesPath+response+".json"))
                             .withHeader("Content-Type", "application/json")));
         }else
             getLog().log("WIREMOCK Server is not Running. Please check !!");
@@ -219,7 +219,7 @@ public class APIFactoryImplementation implements APIFactory{
                     .withRequestBody(equalToJson(readFileAsString("src/test/resources/wiremock/__files/"+body+".json")))
                     .willReturn(aResponse()
                             .withStatus(201)
-                            .withBody(readFileAsString("src/test/resources/wiremock/__files/"+response+".json"))
+                            .withBody(readFileAsString(Constants.wireMockFilesPath+response+".json"))
                             .withHeader("Content-Type", "application/json")));
         }else {
             getLog().log("WIREMOCK Server is not Running.Please check !!");

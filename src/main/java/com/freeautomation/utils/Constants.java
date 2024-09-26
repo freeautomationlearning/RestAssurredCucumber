@@ -7,5 +7,5 @@ package com.freeautomation.utils;
 public class Constants {
     final public static String responseFilePath="src/test/resources/nodelocators/";
     final public static String configFilePath="src/test/resources/config.json";
-
+    final public static String wireMockFilesPath="src/test/resources/wiremock/__files/";
 }
