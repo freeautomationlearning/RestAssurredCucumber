@@ -4,6 +4,9 @@
 package com.freeautomation.base;
 
 import com.freeautomation.utils.Constants;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.jayway.jsonpath.DocumentContext;
 import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,11 +22,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+
 public class APIFactoryImplementation implements APIFactory{
 
     public static ThreadLocal<RequestSpecification> request = new InheritableThreadLocal<RequestSpecification>();
     public static ThreadLocal<Response> response = new InheritableThreadLocal<Response>();
     public static ThreadLocal<Scenario> log = new InheritableThreadLocal<Scenario>();
+    public static ThreadLocal<WireMockServer> wireMock = new InheritableThreadLocal<>();
+    public static ThreadLocal<String> wireMockURI = new InheritableThreadLocal<>();
 
     @Override
     public void invokeAPI() {
@@ -168,5 +176,75 @@ public class APIFactoryImplementation implements APIFactory{
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void invokeWireMockServer() {
+        Integer wiremockPort = Integer.parseInt(getJSONValue(Constants.configFilePath,"mockPort"));
+        String wiremockHost = getJSONValue(Constants.configFilePath,"mockHost");
+        WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(wiremockPort));
+        wireMockServer.start();
+        WireMock.configureFor(wiremockHost,wiremockPort);
+        setWireMockServer(wireMockServer);
+    }
+
+    @Override
+    public void closeWireMockServer() {
+        if(getWireMockServer().isRunning() || getWireMockServer()!=null)
+        {
+            getWireMockServer().stop();
+        }
+    }
+    @Override
+    public void mockGetWireMockResponse(String uri, String response) {
+        // Stub for GET request
+        if(getWireMockServer()!=null)
+        {
+            stubFor(get(urlEqualTo(uri))
+                    .willReturn(aResponse()
+                            .withStatus(200)
+                            .withBody(readFileAsString("src/test/resources/wiremock/__files/"+response+".json"))
+                            .withHeader("Content-Type", "application/json")));
+        }else
+            getLog().log("WIREMOCK Server is not Running. Please check !!");
+           // throw new RuntimeException("WIREMOCK Server is not Running. Please check !!");
+    }
+
+    @Override
+    public void mockPostWireMockResponse(String uri, String body, String response) {
+        // Stub for POST request
+        if(getWireMockServer()!=null)
+        {
+            stubFor(post(urlEqualTo(uri))
+                    .withRequestBody(equalToJson(readFileAsString("src/test/resources/wiremock/__files/"+body+".json")))
+                    .willReturn(aResponse()
+                            .withStatus(201)
+                            .withBody(readFileAsString("src/test/resources/wiremock/__files/"+response+".json"))
+                            .withHeader("Content-Type", "application/json")));
+        }else {
+            getLog().log("WIREMOCK Server is not Running.Please check !!");
+         //   throw new RuntimeException("WIREMOCK Server is not Running. Please check !!");
+        }
+
+    }
+
+    @Override
+    public WireMockServer getWireMockServer() {
+        return wireMock.get();
+    }
+
+    @Override
+    public void setWireMockServer(WireMockServer wireMockServer) {
+        wireMock.set(wireMockServer);
+    }
+
+    @Override
+    public String getWireMockURI() {
+        return wireMockURI.get();
+    }
+
+    @Override
+    public void setWireMockURI(String wireMockUri) {
+        wireMockURI.set(wireMockUri);
     }
 }

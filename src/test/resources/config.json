@@ -1,3 +1,7 @@
 {
-  "baseUri": "https://api.restful-api.dev"
+  "baseUri": "https://api.restful-api.dev",
+  "isMockEnable": true,
+  "mockPort": "9090",
+  "mockHost": "localhost"
+
 }

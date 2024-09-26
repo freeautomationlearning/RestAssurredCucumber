@@ -4,6 +4,7 @@
 
 package com.freeautomation.base;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import io.cucumber.java.Scenario;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -31,5 +32,12 @@ public interface APIFactory {
     public String readJSON(String jsonPath,String text);
     public void setContentType(String contentType);
     public void setRequestBody(Object requestBody);
-
+    public void invokeWireMockServer();
+    public void closeWireMockServer();
+    public void mockGetWireMockResponse(String uri, String response);
+    public void mockPostWireMockResponse(String uri, String body,String response);
+    public WireMockServer getWireMockServer();
+    public void setWireMockServer(WireMockServer wireMockServer);
+    public String getWireMockURI();
+    public void setWireMockURI(String wireMockURI);
 }

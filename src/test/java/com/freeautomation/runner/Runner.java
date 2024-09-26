@@ -13,8 +13,7 @@ import org.testng.annotations.DataProvider;
         glue = {"com.freeautomation.stepdefinations","com.freeautomation.reports"},                 // Path to your step definitions
 //        plugin = {"pretty", "html:target/cucumber-reports.html", "json:target/cucumber.json"}, //Cucumber report plugin
         plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
-        tags = "@get or @post or @put or @patch or @delete",
-//        tags = "@get",
+        tags = "@get or @post or @put or @patch or @delete or not @wiremock_requests",
         monochrome = true                         // For better console output
 )
 public class Runner extends AbstractTestNGCucumberTests {
