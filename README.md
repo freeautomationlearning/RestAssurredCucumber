@@ -4,17 +4,11 @@ RestAssuredCucumber is a Java-based framework for API testing that leverages the
 
 ## Features
 - Behavior-Driven Development (BDD): Write clear and understandable tests using Gherkin syntax.
-
 - API Testing: Easily test various HTTP methods (GET, POST, PUT, PATCH, DELETE).
-
 - Support Parallel Execution: Easily execute each scenario parallel with different data.
-
 - Mock Server Support: Utilize WireMock to mock API responses for testing without relying on external services.
-
 - Dynamic Request Handling: Set query and path parameters dynamically.
-
 - JSON Handling: Simplified methods for reading and writing JSON using POJOs.
-
 - Extensive Reporting: Integration with ExtentReports for detailed test reporting.
 
 ## Prerequisites
