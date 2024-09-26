@@ -92,7 +92,7 @@ RestAssurredCucumber
 
 ## Reporting
 
-The framework integrates with ExtentReports. After running tests, reports will be generated in the target>>Report directory. Generated the following reports.
+The framework integrates with ExtentReports. After running tests, reports will be generated in the target>>Report directory. Generate the following reports.
 - HTML format report.
 - PDF format report.
 - Excel format report.
